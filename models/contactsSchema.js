@@ -13,8 +13,12 @@ const contactSchema = new mongoose.Schema({
   favorite: {
     type: Boolean,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }
 });
 
-const Contact = mongoose.model('db-contacts', contactSchema, 'contacts');
+const Contact = mongoose.model('contact', contactSchema);
 
 module.exports = Contact;

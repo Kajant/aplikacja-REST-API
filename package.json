@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "bcrypt": "^5.1.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.4.5",
@@ -17,7 +18,9 @@
     "generate-unique-id": "^2.0.3",
     "joi": "^17.13.3",
     "mongoose": "^8.3.2",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",
