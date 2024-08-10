@@ -1,4 +1,4 @@
-const Users = require("../models/userSchema");
+const User = require("../models/userSchema");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 
@@ -18,13 +18,13 @@ const register = async (req, res, next) => {
     }
 
     try {
-        const user = await Users.findOne({ email }).lean();
+        const user = await User.findOne({ email }).lean();
 
         if (user) {
             return res.status(409).json({ message: 'This email is already taken' });
         }
 
-        const newUser = new Users({ email });
+        const newUser = new User({ email });
         await newUser.setPassword(password);
         await newUser.save();
 
@@ -43,9 +43,9 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   
   const { email, password } = req.body;
-  const user = await Users.findOne({ email })
-  
   const { error } = schemaLogin.validate({ email, password });
+  const user = await User.findOne({ email })
+  
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
@@ -76,22 +76,23 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
     try {
-        const user = await Users.findById(req.user._id);
+        const user = await User.findById(req.user._id);
       if (!user) {
         return res.status(401).json({ message: "User not found" });
       }
   
       user.token = null;
       await user.save();
-  
+      console.log("Logged out")
       return res.status(204).send();
+      
     } catch (err) {
       next(err);
     }
   };
     
   const current = async (req, res) => {
-    const user = await Users.findById(req.user._id);
+    const user = await User.findById(req.user._id);
     if (user) {
       return res.status(200).json({ email: user.email, subscription: user.subscription });
     } else {

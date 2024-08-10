@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
-const  {setJWTStrategy}  = require('./config/jwt');
+const {setJWTStrategy} = require('./config/jwt');
 
 const contacts = require("./routes/api/contacts.js");
 const auth = require('./routes/api/auth.js')
