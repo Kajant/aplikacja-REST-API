@@ -18,7 +18,8 @@ const schemaFavorite = Joi.object({
 
 const getListContacts = async (req, res, next) => {
 try {
-  const contacts = await service.listContacts();
+  const owner = req.user._id;
+  const contacts = await service.listContacts(owner);
   res.status(200).json(contacts);
 } catch (error) {
   next(error);
@@ -45,7 +46,9 @@ const addNewContact = async (req, res, next) => {
     return res.status(400).json({ message: `Field ${body.error.message}`});
   }
   try {
-    const newContact = {name, email, phone};
+    
+    const owner = req.user._id;
+    const newContact = {name, email, phone, owner};
     await service.addContact(newContact);
     res.status(201).json(newContact);
   } catch (error) {
@@ -68,11 +71,11 @@ const removeThisContact = async (req, res, next) => {
 
 const updateThisContact = async (req, res, next) => {
   const id = req.params.contactId;
+  const body = schemaUpdate.validate(req.body);
   const { name, email, phone, } = req.body;
   if (!name && !email && !phone) {
     return res.status(400).json({ message: "missing fields" });
   }
-  const body = schemaUpdate.validate(req.body);
   if (body.error) {
     return res.status(400).json({ message: `Field ${body.error.message}` });
   }
