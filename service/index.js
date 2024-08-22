@@ -1,4 +1,5 @@
 const Contact = require("../models/contactsSchema");
+const User = require("../models/userSchema")
 
 const listContacts = async (id) => {
   return Contact.find({ owner: id })
@@ -23,10 +24,18 @@ const updateContact = (id, fields) => {
   );
 };
 
+const updateUser = (id, fields) => {
+    return User.findOneAndUpdate(
+ { _id: id },
+ { $set: fields },
+);
+}
+
 module.exports = {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
+  updateUser,
 };
