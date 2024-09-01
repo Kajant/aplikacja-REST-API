@@ -20,6 +20,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+   avatarURL: {
+    type: String,
+  },
 },);
 
 userSchema.methods.setPassword = async function (password) {
@@ -31,8 +34,12 @@ userSchema.methods.validatePassword = async function (password) {
 }
 
 userSchema.methods.setToken = async function (token) {
-  this.token = token
+  this.token = token;
 }
+
+userSchema.methods.setAvatar = async function (avatarURL) {
+    this.avatarURL = avatarURL;
+  }
     
 const User = mongoose.model('User', userSchema);
 
