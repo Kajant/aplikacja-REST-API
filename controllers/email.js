@@ -1,11 +1,11 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-const { M_USER, M_PASS } = process.env;
+const { M_USER, M_PASS, M_PORT, M_HOST, M_FROM } = process.env;
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.mailgun.org",
-  port: 587,
+  host: M_HOST,
+  port: M_PORT,
   secure: false,
   auth: {
     user: M_USER,
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 const main = async (email, subject, html) => {
   const info = await transporter.sendMail({
-    from: '"Kajant" <kajant.mailer@gmail.com>',
+    from: M_FROM,
     to: email,
     subject,
     html, 

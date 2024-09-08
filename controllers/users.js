@@ -9,8 +9,8 @@ const { main } = require("../controllers/email.js");
 const { v4: uuidv4 } = require("uuid");
 
 const schemaLogin = Joi.object({
-    password: Joi.string().min(10).required(),
-    email: Joi.string().email().required(),
+    password: Joi.string().regex(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{10,20}$/).required(),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'pl'] } }).required(),
     subscription: Joi.string().valid("starter", "pro", "business").default("starter"),
     token: Joi.string().default(null),
   });
@@ -172,7 +172,7 @@ const logout = async (req, res, next) => {
    const user = await service.updateUser(req.user._id, {avatarURL: newAvatarURL} );
  
      if (!user) {
-       res.status(401).json({ message: "User not found" });
+       res.status(404).json({ message: "User not found" });
      } else {
        res.status(200).json({message: `${newAvatarURL}`});
      }
@@ -205,7 +205,7 @@ const logout = async (req, res, next) => {
     try {
       const { email} = req.body
       const user = await User.findOne({ email })
-      if (!user) { res.status(400).json(`User was not found`)}
+      if (!user) { res.status(404).json(`User not found`)}
       
       else if (!user.verify) {
         const subject="reverification process"
